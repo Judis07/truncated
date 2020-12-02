@@ -23,6 +23,7 @@ const Form = () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}`, {
         longUrl: urlValue,
+        baseUrl: 'https://truncated.herokuapp.com',
       });
 
       console.log('Res', res);
@@ -68,7 +69,7 @@ const Form = () => {
               <div className="long-url">{data.longUrl}</div>
 
               <div className="short-url">
-                <div>{data.shortUrl}</div>
+                <div style={{ wordBreak: 'break-all' }}>{data.shortUrl}</div>
                 <div className="copy-cta">
                   <CopyToClipboard
                     text={data.shortUrl}
