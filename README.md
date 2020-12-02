@@ -1,4 +1,4 @@
-Link to this site: https://truncated.herokuapp.com/bvQ7RhzV1
+Link to this site: https://truncated.vercel.app/
 
 # Getting Started with Create React App
 
