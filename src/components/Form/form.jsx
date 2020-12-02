@@ -1,17 +1,37 @@
 import { useState } from 'react';
+import axios from 'axios';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Loader from './Loader/loader';
 
 const Form = () => {
+  // console.log('proces', process.env.REACT_APP_API_URL);
+
   const [urlValue, setUrlValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [isCopied, setIsCopied] = useState(false);
+
   const handleChange = (event) => {
     const { value } = event.target;
     setUrlValue(value);
   };
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     setLoading(true);
+    setIsCopied(false);
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}`, {
+        longUrl: urlValue,
+      });
+
+      console.log('Res', res);
+      setData(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.log('error', err);
+      setLoading(false);
+    }
 
     console.log(urlValue);
     setUrlValue('');
@@ -41,6 +61,26 @@ const Form = () => {
             )}
           </div>
         </form>
+
+        {data && (
+          <div className="result-div">
+            <div className="result-div-inner">
+              <div className="long-url">{data.longUrl}</div>
+
+              <div className="short-url">
+                <div>{data.shortUrl}</div>
+                <div className="copy-cta">
+                  <CopyToClipboard
+                    text={data.shortUrl}
+                    onCopy={() => setIsCopied(true)}
+                  >
+                    <span> {isCopied ? 'Copied' : 'Copy'}</span>
+                  </CopyToClipboard>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
